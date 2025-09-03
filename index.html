@@ -107,6 +107,43 @@
     </header>
 
     <!-- PROJECTS -->
+    
+    <!-- BajaBot: Floating Chat Button + Panel -->
+<link rel="stylesheet" href="bajabot/bajabot.css">
+
+<div id="bajabot-root" aria-live="polite">
+  <!-- Floating Button -->
+  <button id="bajabot-toggle" class="bb-btn" aria-label="Open BajaBot chat" title="Ask BajaBot">
+    <img src="bajabot/bajabot-avatar.png" alt="BajaBot icon" width="32" height="32" style="border-radius:50%;">
+  </button>
+
+  <!-- Chat Panel -->
+  <section id="bajabot-panel" class="bb-panel" role="dialog" aria-modal="false" aria-labelledby="bajabot-title" hidden>
+    <header class="bb-header">
+      <div class="bb-avatar" aria-hidden="true">
+        <img src="bajabot/bajabot-avatar.png" alt="BajaBot avatar" width="36" height="36" style="border-radius:50%;">
+      </div>
+      <div class="bb-headings">
+        <h2 id="bajabot-title">BajaBot</h2>
+        <p class="bb-sub">Ask me about California wildlife!</p>
+      </div>
+      <button id="bajabot-close" class="bb-icon" aria-label="Close chat">✕</button>
+    </header>
+
+    <main id="bajabot-messages" class="bb-messages" tabindex="0">
+      <!-- Messages will render here -->
+    </main>
+
+    <form id="bajabot-form" class="bb-form" autocomplete="off">
+      <input id="bajabot-input" class="bb-input" name="q" type="text"
+             placeholder="Type an animal (e.g., pelican, coyote, sea lion)…"
+             aria-label="Ask BajaBot a wildlife question" required>
+      <button class="bb-send" type="submit" aria-label="Send">Send</button>
+    </form>
+  </section>
+</div>
+
+<script defer src="bajabot/bajabot.js"></script>
     <section id="projects" class="grid">
       <!-- MIT App Inventor Game -->
       <article class="card">
