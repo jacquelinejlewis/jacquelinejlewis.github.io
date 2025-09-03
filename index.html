@@ -12,6 +12,41 @@
       --card:#ffffff; --border:#e4dcd3; --shadow:0 6px 16px rgba(0,0,0,0.06);
     }
     *{box-sizing:border-box}
+    <!-- BajaBot: Floating Chat Button + Panel -->
+<link rel="stylesheet" href="bajabot.css">
+
+<div id="bajabot-root" aria-live="polite">
+  <!-- Floating Button -->
+  <button id="bajabot-toggle" class="bb-btn" aria-label="Open BajaBot chat" title="Ask BajaBot">
+    <img src="bajabot-avatar.png" alt="BajaBot icon" width="32" height="32" style="border-radius:50%;">
+  </button>
+
+  <!-- Chat Panel -->
+  <section id="bajabot-panel" class="bb-panel" role="dialog" aria-modal="false" aria-labelledby="bajabot-title" hidden>
+    <header class="bb-header">
+      <div class="bb-avatar" aria-hidden="true">
+        <img src="bajabot-avatar.png" alt="BajaBot avatar" width="36" height="36" style="border-radius:50%;">
+      </div>
+      <div class="bb-headings">
+        <h2 id="bajabot-title">BajaBot</h2>
+        <p class="bb-sub">Ask me about California wildlife!</p>
+      </div>
+      <button id="bajabot-close" class="bb-icon" aria-label="Close chat">✕</button>
+    </header>
+
+    <main id="bajabot-messages" class="bb-messages" tabindex="0"></main>
+
+    <form id="bajabot-form" class="bb-form" autocomplete="off">
+      <input id="bajabot-input" class="bb-input" name="q" type="text"
+             placeholder="Type an animal (e.g., pelican, coyote, sea lion)…"
+             aria-label="Ask BajaBot a wildlife question" required>
+      <button class="bb-send" type="submit" aria-label="Send">Send</button>
+    </form>
+  </section>
+</div>
+
+<!-- cache-buster ?v=1 helps avoid old files while testing -->
+<script defer src="bajabot.js?v=1"></script>
     html,body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
     .container{max-width:1000px;margin:0 auto;padding:40px 20px}
