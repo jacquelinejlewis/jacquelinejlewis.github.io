@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jac — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* 🎨 Fun Doodle Aesthetic */
+    :root {
+      --bg:#fffaf3; --ink:#2c2c2c; --accent:#ff7043; --highlight:#ffe0b2;
+      --card:#ffffff; --border:#e4dcd3; --shadow:0 6px 16px rgba(0,0,0,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+    .container{max-width:1000px;margin:0 auto;padding:40px 20px}
+    header{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+    .avatar{
+      width:200px;height:200px;object-fit:cover;background:var(--card);
+      border:3px solid var(--accent);padding:6px;box-shadow:var(--shadow);
+      border-radius:30% 70% 70% 30% / 40% 60% 40% 60%;transition:transform .3s ease;
+    }
+    .avatar:hover{transform:rotate(-3deg) scale(1.03)}
+    h1{font-size:clamp(28px,4vw,42px);margin:0}
+    .tagline{max-width:60ch;color:#6b6b6b}
+    .pill{display:inline-block;padding:6px 12px;border:2px solid var(--accent);border-radius:999px;background:var(--highlight);font-size:14px;font-weight:600}
+    .nav{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+    .nav a,.btn{
+      background:var(--highlight);border:2px solid var(--accent);border-radius:999px;
+      padding:8px 14px;font-weight:600;font-size:14px;box-shadow:2px 2px 0 var(--accent);
+      text-decoration:none;color:var(--ink);transition:transform .2s;
+    }
+    .nav a:hover,.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--accent)}
+    a{color:var(--ink);text-decoration:none;border-bottom:2px dashed var(--accent);transition:background .2s,color .2s}
+    a:hover{background:var(--highlight);color:var(--accent)}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:24px}
+    .card{position:relative;background:var(--card);border:2px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+    .card::before{content:"";position:absolute;inset:4px;border:2px dashed var(--border);border-radius:14px;pointer-events:none}
+    h3{font-size:1.2rem;position:relative;margin:0 0 8px}
+    h3::after{
+      content:"";position:absolute;left:0;bottom:-4px;width:100%;height:5px;
+      background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='6'><path d='M0 3 Q 10 -2, 20 3 T 40 3 T 60 3 T 80 3 T 100 3 T 120 3' stroke='%23ff7043' stroke-width='2' fill='transparent'/></svg>") repeat-x;
+      background-size:60px 6px;
+    }
+    footer{margin-top:40px;color:#6b6b6b;font-size:14px}
+
+    /* Code block doodle look */
+    .code-wrap{border:2px solid var(--accent);border-radius:12px;background:#fff8f0;box-shadow:3px 3px 0 var(--accent);padding:14px}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .toolbar .title{font-weight:700}
+    pre{margin:0;overflow:auto;max-height:520px}
+    code{font-family:"Fira Code",ui-monospace,Consolas,monospace;font-size:13.5px}
+    details summary{cursor:pointer;font-weight:600;margin-bottom:8px;list-style:none}
+    .tiny-hint{color:#6b6b6b;font-size:12px;margin:0 2px}
+
+    /* --- Game styles --- */
+    .notice{
+      background:#fffdf8;border:2px dashed var(--accent);border-radius:14px;
+      padding:12px;margin:10px 0;box-shadow:2px 2px 0 var(--accent)
+    }
+    .game-wrap{display:flex;flex-direction:column;gap:10px}
+    .hud{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+      background:#fff8f0;border:2px solid var(--accent);border-radius:12px;
+      padding:8px 10px;font-weight:700;box-shadow:3px 3px 0 var(--accent)
+    }
+    .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .play-area{
+      position:relative;border:2px solid var(--border);border-radius:18px;
+      padding:8px;background:#ffffff;box-shadow:var(--shadow)
+    }
+    .play-area::before{
+      content:"";position:absolute;inset:6px;border:2px dashed var(--border);
+      border-radius:14px;pointer-events:none
+    }
+    #gameCanvas {
+  display:block;
+  margin:0 auto;
+  border-radius:12px;
+  background: transparent; /* let JS gradient show */
+}
+
+    @media (max-width:520px){header{justify-content:center;text-align:center}.tagline{margin:0 auto}}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <!-- HERO -->
+    <header>
+      <img class="avatar" src="websiteavatar.png" alt="Jac doodle avatar with skunk" />
+      <div>
+        <span class="pill">Developer • Student • Designer</span>
+        <h1>Hi! I'm <span style="color:var(--accent)">Jacqueline</span> 👋</h1>
+        <p class="tagline">
+          I spent ten years in wildlife rehabilitation and now I’m studying Computer Science—building
+          friendly tools that blend education and tech.
+        </p>
+        <nav class="nav">
+          <a href="#projects">Projects</a>
+          <a href="#play">Game</a>
+          <a href="#code">C++ Code</a>
+          <a href="#contact">Contact</a>
+          <a href="Jacqueline_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="grid">
+      <!-- MIT App Inventor Game -->
+      <article class="card">
+        <h3>MIT App Inventor Game 🎮</h3>
+        <p>A fast, tap-to-score mini-game built in MIT App Inventor. I used CloudDB for high scores,
+           timers for difficulty, and simple sprites to teach game logic to beginners.</p>
+        <div class="media">
+  <img src="logobaja.png" alt="Baja the pelican sprite" style="max-width:200px; height:auto; border-radius:12px;">
+</div>
+
+        <p>
+  <!-- Play demo just a placeholder -->
+  <p>
+  <a href="#play">Play demo</a> ·
+  <a href="MIT_AppInventor_Writeup.pdf" target="_blank" rel="noopener">Project write-up</a>
+</p>
+
+
+ 
+      </article>
+
+
+
+      <!-- Binary/Decimal Converter project card -->
+      <article class="card">
+        <h3>Binary/Decimal Converter 🔢</h3>
+        <p>A simple C++ program to validate inputs and identify whether they’re binary or decimal.
+           (See code below; I kept the original assignment formatting.)</p>
+        <a href="#code">Jump to the C++ source</a>
+      </article>
+    </section>
+
+    <section id="calc" class="card">
+  <h3>Binary ↔ Decimal Calculator</h3>
+  <p class="tagline">Matches my C++ rules: binary must start with <code>0</code> (≤9 chars), decimal is 0–255 with no leading zero.</p>
+
+  <div class="calc">
+    <label class="calc-label" for="calcInput">Enter a number:</label>
+    <input id="calcInput" class="calc-input" placeholder="e.g., 010101 or 42" autocomplete="off" />
+    <div class="calc-row">
+      <button id="calcBtn" class="btn" type="button">Check & Convert</button>
+      <button id="calcClear" class="btn" type="button">Clear</button>
+    </div>
+
+    <div class="calc-results" id="calcResults" aria-live="polite">
+      <div><strong>Status:</strong> <span id="calcStatus">–</span></div>
+      <div><strong>As Binary:</strong> <code id="calcAsBin">–</code> <button class="mini-copy btn" id="copyBin" type="button">Copy</button></div>
+      <div><strong>As Decimal:</strong> <code id="calcAsDec">–</code> <button class="mini-copy btn" id="copyDec" type="button">Copy</button></div>
+    </div>
+
+    <p class="tiny-hint">Rules recap — Binary: starts with <code>0</code>, ≤9 chars, only 0/1. Decimal: 0–255, digits only, no leading 0 (except “0”).</p>
+  </div>
+</section>
+
+    <!-- GAME -->
+    <section id="play" class="card" style="margin-top:16px">
+      <h3>Baja’s Snack's 🪶🐟</h3>
+
+      <!-- Pollution-awareness note -->
+      <div class="notice">
+        <strong>Why avoid trash?</strong> Pelicans (like Baja!) are harmed by floating debris—plastic bags, lines, and hooks.
+        Birds can mistake plastics for fish; hooks and monofilament can cause injuries and starvation.
+        Even “small” litter breaks into microplastics that enter the food chain.
+        <em>Feed Baja healthy fish—and keep hooks out of the water.</em>
+      </div>
+
+      <div class="game-wrap">
+        <div class="hud">
+          <div>Score: <span id="gScore">0</span></div>
+          <div>Time: <span id="gTime">60</span>s</div>
+          <div>Lives: <span id="gLives">3</span></div>
+          <div>Best: <span id="gBest">0</span></div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="btnStart" type="button">Start</button>
+          <button class="btn" id="btnPause" type="button">Pause</button>
+          <button class="btn" id="btnReset" type="button">Reset</button>
+          <span class="tiny-hint">Desktop: Arrow keys ← →. Mobile: tap left/right side.</span>
+        </div>
+
+        <div class="play-area">
+          <canvas id="gameCanvas" width="360" height="560"></canvas>
+        </div>
+        <p class="tiny-hint">🐟 Fish = +1 point · 🪝 Hooks = -1 life · ⏱️ 60 seconds, 3 lives</p>
+      </div>
+    </section>
+
+    <!-- C++ CODE -->
+    <section id="code" class="card" style="margin-top:16px">
+      <h3>C++ Snippet</h3>
+      <p class="tagline">Binary/Decimal validator (original assignment code, plus a tiny <code>main()</code> so it runs).</p>
+
+      <div class="code-wrap">
+        <div class="toolbar">
+          <span class="title">converter.cpp</span>
+          <button class="btn" id="copyBtn" type="button">Copy</button>
+        </div>
+<pre><code id="cppCode">#include&lt;iostream&gt; //Jacqueline Lewis
+#include &lt;string&gt;   //25010437
+using namespace std;  //Manawatu campus
+
+bool binaryQ (string x) {
+    if (x.empty()) return false;
+    if (x[0] != '0') {
+        return false;
+    }
+    if (x.length() &gt; 9) {
+        return false;
+    }
+    for (int i = 0; i &lt; (int)x.length(); i++) {
+        if (x[i] != '0' &amp;&amp; x[i] != '1') {
+            return false; 
+        }
+    }
+    return true;
+}
+
+bool decimalQ(string x) {
+    if (x.empty()) return false;
+    if (x.length() &gt; 1 &amp;&amp; x[0] == '0') {
+        return false;
+    }
+    for (int i = 0; i &lt; (int)x.length(); i++) {
+        if (x[i] &lt; '0' || x[i] &gt; '9') {
+            return false;
+        }
+    }
+    try {
+        int num = stoi(x);
+        if (num &lt; 0 || num &gt; 255) {
+            return false;
+        }
+    } catch (...) {
+        return false;
+    }
+    return true;
+}
+
+int main() {
+    string input;
+    cout &lt;&lt; "Enter a binary (starting with 0, up to 9 chars) or decimal (0..255): ";
+    cin &gt;&gt; input;
+
+    if (binaryQ(input)) {
+        cout &lt;&lt; input &lt;&lt; " is a valid binary number." &lt;&lt; endl;
+    } else if (decimalQ(input)) {
+        cout &lt;&lt; input &lt;&lt; " is a valid decimal number." &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; "Invalid input." &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="card" style="margin-top:16px">
+      <h3>Contact</h3>
+      <p>Email: <a href="mailto:jacquelinejlewis5@gmail.com">jacquelinejlewis5@gmail.com</a> ·
+         GitHub: <a href="https://github.com/jacquelinejlewis" target="_blank" rel="noopener">@jacquelinejlewis</a> ·
+         LinkedIn: <a href="https://linkedin.com/in/jacquelinejlewis" target="_blank" rel="noopener">/in/jacquelinejlewis</a></p>
+    </section>
+
+    <footer>© <span id="y"></span> Jacqueline Lewis</footer>
+  </main>
+
+  <!-- Script: keep year & copy code -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const el = document.getElementById('cppCode');
+      const text = el.textContent.replace(/^\n/, '');
+      navigator.clipboard.writeText(text).then(()=>{
+        const btn = document.getElementById('copyBtn');
+        const prev = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(()=>btn.textContent = prev, 1200);
+      });
+    });
+  </script>
+
+  <!-- Script: Baja’s Snack Attack (pelican character game with sprite images) -->
+  <script>
+  (function(){
+    const cvs = document.getElementById('gameCanvas');
+    const ctx = cvs.getContext('2d');
+    const scoreEl = document.getElementById('gScore');
+    const timeEl  = document.getElementById('gTime');
+    const livesEl = document.getElementById('gLives');
+    const bestEl  = document.getElementById('gBest');
+    const btnStart= document.getElementById('btnStart');
+    const btnPause= document.getElementById('btnPause');
+    const btnReset= document.getElementById('btnReset');
+    const BEST_KEY = 'baja_best';
+
+    // Helper to load an image
+    function makeImg(src){ const i=new Image(); i.src=src; return i; }
+
+    // Assets (place these PNGs next to this file)
+    const bajaImg    = makeImg("baja.png");
+    const fishImgs   = [makeImg("fish1.png"), makeImg("fish2.png"), makeImg("fish3.png")];
+    const hookImgs   = [makeImg("fishhook1.png"), makeImg("fishhook2.png"), makeImg("fishhook3.png")];
+
+    let state='idle', items=[], score=0, timeLeft=60, lives=3, spawnTimer=0;
+    let baja = {x: cvs.width/2, y: cvs.height-70, w:60, h:60, speed:260};
+    let keys = {left:false, right:false};
+
+    bestEl.textContent = localStorage.getItem(BEST_KEY) || 0;
+
+    function reset(){
+      state='idle'; items=[]; score=0; timeLeft=60; lives=3; spawnTimer=0;
+      scoreEl.textContent=score; timeEl.textContent=timeLeft; livesEl.textContent=lives;
+      drawSplash();
+    }
+
+    function spawn(){
+      const x = 30 + Math.random()*(cvs.width-60);
+      const vy = 2 + Math.random()*1.5;
+      const size = 44; // draw size for sprite
+      const isHook = Math.random()<0.28; // ~28% hooks
+      const img = isHook ? hookImgs[(Math.random()*hookImgs.length)|0]
+                         : fishImgs[(Math.random()*fishImgs.length)|0];
+      items.push({x,y:-30,vy,size,img,isHook});
+    }
+
+    function update(dt){
+      if(state!=='running') return;
+
+      // Baja movement
+      if(keys.left)  baja.x -= baja.speed*dt;
+      if(keys.right) baja.x += baja.speed*dt;
+      clampBaja();
+
+      // Spawn items (slightly faster with score)
+      spawnTimer+=dt;
+      const spawnEvery = Math.max(0.4, 0.9 - score*0.01);
+      if(spawnTimer>spawnEvery){ spawn(); spawnTimer=0; }
+
+      // Move items
+      items.forEach(it=> it.y += it.vy*60*dt);
+
+      // Collisions with Baja (AABB-ish check using center x window + vertical overlap)
+      for(let i=items.length-1;i>=0;i--){
+        const it=items[i];
+        const withinX = Math.abs(it.x - baja.x) < (baja.w*0.55);
+        const withinY = it.y + it.size/2 > baja.y - 8 && it.y < baja.y + 20;
+        if(withinX && withinY){
+          items.splice(i,1);
+          if(it.isHook){ lives--; livesEl.textContent=lives; }
+          else { score++; scoreEl.textContent=score; }
+        }
+      }
+
+      // Remove offscreen
+      items = items.filter(it => it.y < cvs.height+60);
+
+      // Clock
+      timeLeft -= dt; if(timeLeft<=0||lives<=0) endGame();
+      timeEl.textContent = Math.max(0, timeLeft|0);
+    }
+
+    function draw(){
+// blue gradient background (sky → water)
+const gradient = ctx.createLinearGradient(0, 0, 0, cvs.height);
+gradient.addColorStop(0, '#b3e5fc');   // light sky blue
+gradient.addColorStop(1, '#4fc3f7');   // deeper water blue
+ctx.fillStyle = gradient;
+ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+// (optional) dotted overlay — comment out if you don’t want it
+// ctx.fillStyle = 'rgba(0,0,0,0.03)';
+// for (let y=0;y<cvs.height;y+=20)
+//   for (let x=0;x<cvs.width;x+=20)
+//     ctx.fillRect(x,y,2,2);
+
+      // items
+      items.forEach(it=>{
+        if(it.img.complete && it.img.naturalWidth){
+          ctx.drawImage(it.img, it.x - it.size/2, it.y - it.size/2, it.size, it.size);
+        } else {
+          // fallback shape if image not loaded yet
+          ctx.fillStyle = it.isHook ? '#ba68c8' : '#4fc3f7';
+          ctx.beginPath(); ctx.arc(it.x,it.y,it.size*0.45,0,Math.PI*2); ctx.fill();
+        }
+        // halo ring
+        ctx.beginPath(); ctx.arc(it.x,it.y,it.size*0.58,0,Math.PI*2);
+        ctx.strokeStyle= it.isHook ? '#ba68c8' : '#4fc3f7';
+        ctx.lineWidth=2; ctx.stroke();
+      });
+
+      // Baja
+      if(bajaImg.complete && bajaImg.naturalWidth){
+        ctx.drawImage(bajaImg, baja.x-30, baja.y-30, baja.w, baja.h);
+      } else {
+        ctx.fillStyle='#ff7043'; ctx.beginPath(); ctx.arc(baja.x,baja.y,30,0,Math.PI*2); ctx.fill();
+      }
+
+      if(state==='idle'||state==='ended') drawSplash();
+    }
+
+    function drawSplash(){
+      ctx.save();
+      ctx.textAlign='center'; ctx.fillStyle='#2c2c2c';
+      ctx.font='24px Poppins'; ctx.fillText('Baja’s Snack Attack',cvs.width/2,260);
+      ctx.font='16px Poppins'; ctx.fillText('Catch fish, avoid hooks',cvs.width/2,290);
+      ctx.fillText('Press Start',cvs.width/2,320);
+      ctx.restore();
+    }
+
+    function clampBaja(){ baja.x = Math.max(30, Math.min(cvs.width-30, baja.x)); }
+
+    // Keyboard input
+    document.addEventListener('keydown', e=>{
+      if(state!=='running') return;
+      if(e.key==='ArrowLeft') keys.left=true;
+      if(e.key==='ArrowRight') keys.right=true;
+    });
+    document.addEventListener('keyup', e=>{
+      if(e.key==='ArrowLeft') keys.left=false;
+      if(e.key==='ArrowRight') keys.right=false;
+    });
+
+    // Touch: left/right halves
+    cvs.addEventListener('touchstart', e=>{
+      if(state!=='running') return;
+      const r=cvs.getBoundingClientRect();
+      const x=e.touches[0].clientX-r.left;
+      if(x<cvs.width/2) keys.left=true; else keys.right=true;
+    }, {passive:true});
+    cvs.addEventListener('touchend', ()=>{ keys.left=false; keys.right=false; }, {passive:true});
+
+    // Click nudge (desktop)
+    cvs.addEventListener('click', e=>{
+      if(state!=='running') return;
+      const r=cvs.getBoundingClientRect();
+      const x=e.clientX-r.left;
+      if(x<cvs.width/2) baja.x -= 40; else baja.x += 40;
+      clampBaja();
+    });
+
+    function endGame(){
+      state='ended';
+      const best=Math.max(Number(localStorage.getItem(BEST_KEY)||0),score);
+      localStorage.setItem(BEST_KEY,best); bestEl.textContent=best;
+      ctx.save(); ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.fillRect(0,0,cvs.width,cvs.height);
+      ctx.fillStyle='#fff'; ctx.fillRect(40,220,cvs.width-80,140);
+      ctx.strokeStyle='#ff7043'; ctx.lineWidth=3; ctx.strokeRect(40,220,cvs.width-80,140);
+      ctx.fillStyle='#2c2c2c'; ctx.textAlign='center';
+      ctx.font='22px Poppins'; ctx.fillText('Game Over',cvs.width/2,248);
+      ctx.font='16px Poppins'; ctx.fillText(`Score: ${score}  •  Best: ${best}`,cvs.width/2,282);
+      ctx.font='14px Poppins'; ctx.fillText('Press Reset to play again',cvs.width/2,314);
+      ctx.restore();
+    }
+
+    // Buttons
+    btnStart.addEventListener('click', ()=>{ if(state==='ended') reset(); state='running'; });
+    btnPause.addEventListener('click', ()=>{ state=state==='running'?'paused':'running'; btnPause.textContent = state==='running'?'Pause':'Resume'; });
+    btnReset.addEventListener('click', ()=>{ reset(); btnPause.textContent='Pause'; });
+
+    // Loop
+    let last=performance.now();
+    function loop(now){
+      const dt=Math.min(0.05,(now-last)/1000); last=now;
+      if(state==='running') update(dt);
+      draw();
+      requestAnimationFrame(loop);
+    }
+    reset(); requestAnimationFrame(loop);
+  })();
+  </script>
+  <!-- Script: Binary/Decimal Calculator -->
+  <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const $ = (id) => document.getElementById(id);
+    if (!$('calc')) return;
+
+    const input = $('calcInput');
+    const btn   = $('calcBtn');
+    const clr   = $('calcClear');
+    const outS  = $('calcStatus');
+    const outB  = $('calcAsBin');
+    const outD  = $('calcAsDec');
+    const copyB = $('copyBin');
+    const copyD = $('copyDec');
+
+    function binaryQ(x){
+      if (!x) return false;
+      if (x[0] !== '0') return false;
+      if (x.length > 9) return false;
+      return /^[01]+$/.test(x);
+    }
+
+    function decimalQ(x){
+      if (!x) return false;
+      if (x.length > 1 && x[0] === '0') return false;
+      if (!/^[0-9]+$/.test(x)) return false;
+      const num = Number(x);
+      return num >= 0 && num <= 255;
+    }
+
+    const toBinary  = (dec) => Number(dec).toString(2);
+    const toDecimal = (bin) => parseInt(bin, 2).toString(10);
+
+    function setOutputs(status, bin, dec){
+      outS.textContent = status;
+      outB.textContent = bin ?? '–';
+      outD.textContent = dec ?? '–';
+    }
+
+    function handleConvert(){
+      const raw = input.value.trim();
+      if (!raw){ setOutputs('Please enter a value.', '–', '–'); return; }
+      if (binaryQ(raw)){ setOutputs('Valid BINARY ✔', raw, toDecimal(raw)); }
+      else if (decimalQ(raw)){ setOutputs('Valid DECIMAL ✔', toBinary(raw), String(Number(raw))); }
+      else { setOutputs('Invalid input ✖', '–', '–'); }
+    }
+
+    function handleClear(){
+      input.value = '';
+      setOutputs('–','–','–');
+      input.focus();
+    }
+
+    btn.addEventListener('click', handleConvert);
+    clr.addEventListener('click', handleClear);
+    input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') handleConvert(); });
+
+    function attachCopy(button, getText){
+      button.addEventListener('click', ()=>{
+        const t = getText();
+        if (!t || t==='–') return;
+        navigator.clipboard.writeText(t).then(()=>{
+          const prev = button.textContent;
+          button.textContent = 'Copied!';
+          setTimeout(()=> button.textContent = prev, 1000);
+        });
+      });
+    }
+    attachCopy(copyB, ()=> outB.textContent);
+    attachCopy(copyD, ()=> outD.textContent);
+  });
+  </script>
+
+
+
+</body>
+</html>

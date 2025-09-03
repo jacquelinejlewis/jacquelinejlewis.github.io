@@ -1,0 +1,212 @@
+:root {
+  --bg:#fffaf3;
+  --ink:#2c2c2c;
+  --accent:#ff7043;
+  --border:#ffb68a;
+  --shadow:3px 3px 0 var(--border);
+}
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Poppins',sans-serif;
+  line-height:1.5;
+}
+
+header {
+  text-align:center;
+  padding:40px 20px 20px;
+}
+
+header h1 {
+  font-size:2.4rem;
+  margin-bottom:0.2em;
+}
+header .accent{color:var(--accent);}
+header p {max-width:600px;margin:0 auto;}
+
+.container {
+  max-width:1000px;
+  margin:0 auto;
+  padding:20px;
+}
+
+section {margin-bottom:32px;}
+h2 {font-size:1.6rem;margin-bottom:0.5em;}
+
+.card {
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.card h3{margin-top:0;}
+.tagline{font-style:italic;color:#555;margin-top:0;}
+
+.media{margin:12px 0;text-align:center;}
+.media img{max-width:100%;border-radius:12px;}
+
+/* corrected game canvas block */
+:root {
+  --bg:#fffaf3;
+  --ink:#2c2c2c;
+  --accent:#ff7043;
+  --border:#ffb68a;
+  --shadow:3px 3px 0 var(--border);
+}
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Poppins',sans-serif;
+  line-height:1.5;
+}
+
+header {
+  text-align:center;
+  padding:40px 20px 20px;
+}
+
+header h1 {
+  font-size:2.4rem;
+  margin-bottom:0.2em;
+}
+header .accent{color:var(--accent);}
+header p {max-width:600px;margin:0 auto;}
+
+.container {
+  max-width:1000px;
+  margin:0 auto;
+  padding:20px;
+}
+
+section {margin-bottom:32px;}
+h2 {font-size:1.6rem;margin-bottom:0.5em;}
+
+.card {
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.card h3{margin-top:0;}
+.tagline{font-style:italic;color:#555;margin-top:0;}
+
+.media{margin:12px 0;text-align:center;}
+.media img{max-width:100%;border-radius:12px;}
+
+/* corrected game canvas block */
+#gameCanvas {
+  display:block;
+  margin:0 auto;
+  border-radius:12px;
+  background: transparent; /* let gradient from draw() show */
+}
+
+.btn {
+  background:var(--accent);
+  border:none;
+  color:#fff;
+  padding:10px 16px;
+  margin-top:10px;
+  font-size:14px;
+  border-radius:12px;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  transition:transform 0.1s ease;
+}
+.btn:hover{transform:translateY(-2px);}
+
+footer {
+  text-align:center;
+  padding:20px;
+  font-size:0.9rem;
+  color:#555;
+  margin-top:40px;
+}
+
+pre {
+  background:#fffdf8;
+  border:2px dashed var(--border);
+  border-radius:12px;
+  padding:12px;
+  overflow:auto;
+  font-size:14px;
+}
+
+/* calculator styles */
+.calc { display: grid; gap: 10px; }
+.calc-label { font-weight: 600; }
+.calc-input{
+  padding:10px 12px; border:2px solid var(--accent); border-radius:12px;
+  background:#fffdf8; font-size:16px; outline:none;
+}
+.calc-input:focus{ box-shadow:3px 3px 0 var(--accent); }
+.calc-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.calc-results{
+  border:2px dashed var(--border); border-radius:12px; padding:10px;
+  background:#ffffff; box-shadow:var(--shadow);
+}
+.mini-copy{ padding:4px 8px; font-size:12px; box-shadow:2px 2px 0 var(--accent); }
+#gameCanvas{
+  display:block;
+  margin:0 auto;
+  border-radius:12px;
+  background:linear-gradient(#b3e5fc,#4fc3f7);
+}
+
+
+.btn {
+  background:var(--accent);
+  border:none;
+  color:#fff;
+  padding:10px 16px;
+  margin-top:10px;
+  font-size:14px;
+  border-radius:12px;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  transition:transform 0.1s ease;
+}
+.btn:hover{transform:translateY(-2px);}
+
+footer {
+  text-align:center;
+  padding:20px;
+  font-size:0.9rem;
+  color:#555;
+  margin-top:40px;
+}
+
+pre {
+  background:#fffdf8;
+  border:2px dashed var(--border);
+  border-radius:12px;
+  padding:12px;
+  overflow:auto;
+  font-size:14px;
+}
+
+/* calculator styles */
+.calc { display: grid; gap: 10px; }
+.calc-label { font-weight: 600; }
+.calc-input{
+  padding:10px 12px; border:2px solid var(--accent); border-radius:12px;
+  background:#fffdf8; font-size:16px; outline:none;
+}
+.calc-input:focus{ box-shadow:3px 3px 0 var(--accent); }
+.calc-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.calc-results{
+  border:2px dashed var(--border); border-radius:12px; padding:10px;
+  background:#ffffff; box-shadow:var(--shadow);
+}
+.mini-copy{ padding:4px 8px; font-size:12px; box-shadow:2px 2px 0 var(--accent); }
+
