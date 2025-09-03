@@ -14,10 +14,7 @@
   z-index: 9999;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
 }
-/* Make the hidden attribute win over panel display */
-.bb-panel[hidden] { 
-  display: none !important;
-}
+
 .bb-btn {
   width: 56px; height: 56px;
   border-radius: 999px;
