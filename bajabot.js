@@ -1,177 +1,186 @@
-/* BajaBot — local, privacy-friendly, no external libs */
+/* =====================================================
+   BajaBot — lightweight, local animal-facts chatbot
+   No external libs. Works on GitHub Pages.
+   ===================================================== */
 (() => {
-  const el = (sel, root = document) => root.querySelector(sel);
-  const root = el('#bajabot-root');
+  // ----- Element hooks
+  const root      = document.querySelector('#bajabot-root');
   if (!root) return;
 
-  const toggleBtn = el('#bajabot-toggle', root);
-  const panel = el('#bajabot-panel', root);
-  const closeBtn = el('#bajabot-close', root);
-  const messages = el('#bajabot-messages', root);
-  const form = el('#bajabot-form', root);
-  const input = el('#bajabot-input', root);
+  const toggleBtn = root.querySelector('#bajabot-toggle');
+  const panel     = root.querySelector('#bajabot-panel');
+  const closeBtn  = root.querySelector('#bajabot-close');
+  const messages  = root.querySelector('#bajabot-messages');
+  const form      = root.querySelector('#bajabot-form');
+  const input     = root.querySelector('#bajabot-input');
 
-  // --- Data: California wildlife facts (keep it short + sweet)
+  // ----- Data: California wildlife facts (short + friendly)
   const FACTS = {
-
-        "deer mouse": [
-      "Deer mice are one of the most widespread small mammals in North America, often found in grasslands, chaparral, and forests.",
-      "They are excellent climbers and stash seeds in hidden caches—helping plants spread but also sneaking into cabins in winter!"
-    ],
-    "meadow vole": [
-      "Meadow voles make intricate runways in tall grasses; their populations boom and bust, supporting owls, hawks, and coyotes.",
-      "They’re a keystone prey species in California wetlands and grasslands—tiny but critical to the food web."
-    ],
-    "western gray squirrel": [
-      "Western gray squirrels are larger than the more familiar eastern gray and prefer oak woodlands and pine forests.",
-      "They bury acorns and pine nuts—some forgotten ones sprout, helping regenerate forests."
-    ],
-    "pocket gopher": [
-      "Pocket gophers are solitary burrowers; their tunnels aerate soil and recycle nutrients, though they can frustrate gardeners.",
-      "They have external cheek pouches ('pockets') lined with fur for carrying seeds and roots underground."
-    ],
-    "woodrat": [
-      "Woodrats (often called packrats) build elaborate stick houses that can be several feet tall, used for generations.",
-      "They’re known for collecting shiny or odd objects and swapping them for items in their nests!"
-    ],
-
     "brown pelican": [
-      "Brown pelicans plunge-dive from up to 60 feet, tucking their wings at the last second to spear fish with their pouched bill.",
-      "After near-extinction from DDT, brown pelicans recovered and were removed from the U.S. Endangered Species List in 2009."
+      "Brown pelicans plunge-dive from up to ~60 ft, tucking their wings at the last second to scoop fish in their pouch.",
+      "After DDT-era declines, they recovered and were removed from the U.S. Endangered Species list in 2009."
     ],
     "california sea lion": [
-      "California sea lions can swim ~25 mph and 'porpoise'—leaping out of the water—to breathe faster while cruising.",
-      "Males gather harems during breeding season and can weigh 600–800 lbs; females are ~200 lbs."
+      "California sea lions can cruise ~25 mph and ‘porpoise’—leaping for efficient breathing at speed.",
+      "Males can reach 600–800 lbs; females are ~200 lbs."
     ],
     "harbor seal": [
-      "Harbor seals have V-shaped nostrils and spend ~50% of their time hauled out resting on beaches or docks.",
-      "Seals lack external ear flaps (sea lions have them) and move on land with caterpillar-like scoots."
+      "Harbor seals have V-shaped nostrils and no external ear flaps; they move on land with belly ‘scoots’.",
+      "They spend ~half their time hauled out resting on beaches or docks."
     ],
     "coyote": [
-      "Coyotes thrive in cities by being omnivores: fruit, rodents, insects, and… fallen backyard avocados.",
-      "You may hear 'chorus howls'—a family group can sound like many more due to echo and pitch variation."
+      "Coyotes thrive in cities by being omnivores—fruit, rodents, insects, and even fallen backyard avocados.",
+      "A family’s chorus howl can sound like many more due to echo and pitch shifts."
     ],
     "raccoon": [
-      "Raccoons ‘wash’ food because their forepaws are ultra-sensitive; water enhances tactile sensing.",
-      "Urban raccoons often den in attics or chimneys—never block an entry until you’re sure babies aren’t inside!"
+      "Raccoons ‘wash’ food because water heightens the sensitivity of their forepaws.",
+      "Never block an attic/chimney entry without checking for babies—mom will relocate them if given the chance."
     ],
     "gray fox": [
-      "Gray foxes can climb trees—curved claws + rotating forearms let them escape coyotes into branches.",
-      "They’re crepuscular (most active at dawn/dusk) and eat rodents, insects, fruit, and the occasional bird egg."
+      "Gray foxes can climb trees—curved claws + rotating forearms help them escape coyotes.",
+      "They’re crepuscular and eat rodents, insects, fruit, and occasionally eggs."
     ],
     "striped skunk": [
-      "Skunks stomp and do a U-turn warning before spraying; give them space and back away slowly.",
-      "The spray is a sulfur compound; a baking soda + dish soap + hydrogen peroxide mix works better than tomato juice."
+      "Skunks stomp and U-turn as a warning—back away slowly to avoid a spray.",
+      "A peroxide + baking soda + dish soap mix beats tomato juice for neutralizing odor."
     ],
     "virginia opossum": [
-      "Opossums eat ticks by the thousands and rarely get rabies (low body temp). They’re urban sanitation heroes.",
-      "Babies ride on mom’s back; if one falls off, it can’t find her again—call a local wildlife rehabber."
+      "Opossums eat thousands of ticks and seldom get rabies (their body temp is low).",
+      "Babies ride on mom’s back—if one falls off, it can’t find her again. Call a local rehabber."
     ],
     "black-tailed deer": [
-      "Black-tailed deer (a coastal subspecies of mule deer) browse shrubs and love tender garden plants—use deer-resistant natives.",
-      "Fawns often lie still alone for hours; mom is nearby. Don’t ‘rescue’ unless the fawn is clearly in danger."
+      "Coastal black-tailed deer (a mule deer subspecies) browse shrubs; use deer-resistant native plants in gardens.",
+      "Fawns lie motionless for hours while mom feeds—don’t ‘rescue’ unless the fawn is clearly in danger."
     ],
     "mountain lion": [
-      "Mountain lions are elusive; if you encounter one, appear large, keep eye contact, back away slowly—don’t run.",
-      "They help keep deer populations in check, benefiting ecosystems and reducing vehicle collisions."
+      "If you encounter a mountain lion, appear large, keep eye contact, back away slowly—don’t run.",
+      "They help regulate deer, benefiting ecosystems and reducing road collisions."
     ],
     "red-tailed hawk": [
-      "The classic 'hawk scream' in movies is usually a red-tailed hawk, even when the bird on screen isn’t.",
-      "They use thermals to soar with minimal wingbeats—look for the brick-red tail in adults."
+      "Movies often use a red-tailed hawk’s iconic scream even when showing a different bird.",
+      "Look for the brick-red tail on adults soaring on thermals."
     ],
     "peregrine falcon": [
-      "Peregrines dive (stoop) at over 200 mph—the fastest animal on Earth.",
-      "They rebounded in cities by nesting on bridges and skyscrapers after DDT bans."
+      "Peregrines dive (stoop) at 200+ mph—the fastest animal on Earth.",
+      "They’ve adapted to cities, nesting on bridges and skyscrapers."
     ],
     "great blue heron": [
-      "Great blue herons hunt with slow-motion patience, then strike like a spear for fish, gophers, even small snakes.",
+      "Great blues hunt with slow patience, then spear fish, gophers, or small snakes in a flash.",
       "They often nest in colonies (rookeries) high in trees near wetlands."
     ],
     "western gull": [
-      "Western gulls are SF Bay natives; unlike many gulls, they don’t migrate far and are highly territorial around rookeries.",
-      "They’re opportunistic omnivores—seals’ afterbirth at rookeries is on the menu (nature wastes nothing!)."
+      "Western gulls are SF Bay natives and highly territorial at rookeries.",
+      "They’re omnivores—nature wastes nothing, even at seal rookeries."
     ],
     "anna’s hummingbird": [
-      "Anna’s hummingbirds are year-round in much of California; males make a sharp ‘chirp’ with tail feathers during courtship dives.",
-      "They enter nightly torpor to save energy—tiny, but metal."
+      "Anna’s hummingbirds are year-round in much of CA; males ‘chirp’ with tail feathers on courtship dives.",
+      "They enter nightly torpor to conserve energy."
     ],
     "bobcat": [
-      "Bobcats are about twice a housecat’s size with ear tufts and a very short 'bobbed' tail; they’re crepuscular ambush hunters.",
-      "Their spotted coat is perfect chaparral camouflage; they snack on rabbits and rodents."
+      "Bobcats are about twice a housecat’s size with ear tufts and a very short tail.",
+      "Their spotted coat blends into chaparral as they ambush rabbits and rodents."
+    ],
+    /* --- Your added requests --- */
+    "deer mouse": [
+      "Deer mice are widespread in CA grasslands and forests—great climbers and avid seed cachers.",
+      "They stash seeds in hidden caches, helping some plants spread."
+    ],
+    "meadow vole": [
+      "Meadow voles weave runways through tall grasses; populations boom and bust seasonally.",
+      "They’re key prey for owls, hawks, foxes, and coyotes."
+    ],
+    "western gray squirrel": [
+      "Western grays are larger than eastern grays and prefer oak woodlands and pine forests.",
+      "They bury acorns and pine nuts; forgotten caches can sprout and regenerate forests."
+    ],
+    "pocket gopher": [
+      "Pocket gophers aerate soil with burrows; helpful ecologically but pesky to gardeners.",
+      "Their external cheek ‘pockets’ are fur-lined for hauling seeds underground."
+    ],
+    "woodrat": [
+      "Woodrats (packrats) build elaborate stick houses used for generations.",
+      "They’re famous for collecting shiny objects and ‘trading’ them for items in their nests."
     ]
   };
 
-  // Synonyms / common names → canonical keys in FACTS
+  // Synonyms / common queries → canonical keys
   const SYNONYMS = {
     "pelican": "brown pelican",
     "brown-pelican": "brown pelican",
+
     "sea lion": "california sea lion",
     "seal": "harbor seal",
     "harbor-seal": "harbor seal",
+
     "skunk": "striped skunk",
     "opossum": "virginia opossum",
     "possum": "virginia opossum",
+
     "deer": "black-tailed deer",
-    "black-tailed deer": "black-tailed deer",
+    "black tailed deer": "black-tailed deer",
+
     "grey fox": "gray fox",
-    "hummingbird": "anna’s hummingbird",
-    "falcon": "peregrine falcon",
-    "hawk": "red-tailed hawk",
-        "vole": "meadow vole",
+    "gray squirrel": "western gray squirrel",
+    "squirrel": "western gray squirrel",
+
+    "gopher": "pocket gopher",
+
+    "deermouse": "deer mouse",
     "field mouse": "deer mouse",
     "mouse": "deer mouse",
-    "squirrel": "western gray squirrel",
-    "gray squirrel": "western gray squirrel",
-    "gopher": "pocket gopher",
+
+    "vole": "meadow vole",
+
     "wood rat": "woodrat",
     "packrat": "woodrat",
-
+    "woodcut": "woodrat" // likely typo from earlier, mapped for convenience
   };
 
-  const normalize = s => s.toLowerCase().trim()
+  // ----- Helpers
+  const normalize = s => (s || "")
+    .toLowerCase()
+    .trim()
     .replace(/[’']/g, "'")
     .replace(/[^\p{L}\p{N}\s\-]+/gu, "")
     .replace(/\s+/g, " ");
 
-  const choices = Object.keys(FACTS);
+  const CANON = Object.keys(FACTS);
 
   function findAnimal(query) {
     const q = normalize(query);
+    if (!q) return null;
 
-    // 1) Exact canon name
+    // 1) Exact canonical name
     if (FACTS[q]) return q;
 
     // 2) Exact synonym
     if (SYNONYMS[q]) return SYNONYMS[q];
 
-    // 3) Partial match on canon names
-    for (const name of choices) {
+    // 3) Partial match canonical
+    for (const name of CANON) {
       if (name.includes(q) || q.includes(name)) return name;
     }
-
-    // 4) Partial match on synonyms
+    // 4) Partial match synonyms
     for (const [syn, target] of Object.entries(SYNONYMS)) {
       if (syn.includes(q) || q.includes(syn)) return target;
     }
-
-    // 5) Very loose match: pick the first word and scan
+    // 5) First-word loose match
     const first = q.split(" ")[0];
-    for (const name of choices) {
+    for (const name of CANON) {
       if (name.includes(first)) return name;
     }
     for (const [syn, target] of Object.entries(SYNONYMS)) {
       if (syn.includes(first)) return target;
     }
-
     return null;
   }
 
-  function randomFact(animal) {
-    const list = FACTS[animal];
-    return list[Math.floor(Math.random() * list.length)];
-  }
+  const randomFact = animal => {
+    const list = FACTS[animal] || [];
+    return list[Math.floor(Math.random() * list.length)] || "I don’t have a fact yet—but I’m learning!";
+  };
 
-  // --- UI helpers
+  // ----- UI helpers
   function addMsg(text, who = "bot") {
     const row = document.createElement("div");
     row.className = `bb-row ${who}`;
@@ -201,68 +210,49 @@
   }
 
   function greet() {
-    addMsg("Hi, I’m BajaBot! Tell me an animal (e.g., “pelican” or “coyote”) and I’ll share a local California wildlife fact. Try the chips below!");
+    addMsg("Hi, I’m BajaBot! Tell me an animal (e.g., “pelican” or “coyote”) and I’ll share a California wildlife fact. Try the chips below!");
     addChips();
+    messages.dataset.greeted = "1";
   }
 
-  // --- Open/Close
-  const openPanel = () => {
-    panel.hidden = false;
-    input.focus();
-    if (!messages.dataset.greeted) {
-      greet();
-      messages.dataset.greeted = "1";
-    }
-  };
-  const closePanel = () => { panel.hidden = true; toggleBtn.focus(); };
+  // ----- Open/Close logic
+  function openPanel(){ panel.hidden = false; input.focus(); if (!messages.dataset.greeted) greet(); }
+  function closePanel(){ panel.hidden = true; toggleBtn.focus(); }
 
-  toggleBtn.addEventListener("click", () => {
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     panel.hidden ? openPanel() : closePanel();
   });
-  closeBtn.addEventListener("click", closePanel);
 
-  // Close with Escape
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !panel.hidden) closePanel();
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closePanel();
   });
 
-  // --- Open/Close wiring (place near top of bajabot.js)
-const root     = document.querySelector('#bajabot-root');
-if (!root) return;
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) closePanel();
+  });
 
-const panel    = root.querySelector('#bajabot-panel');
-const toggleBtn= root.querySelector('#bajabot-toggle');
-const closeBtn = root.querySelector('#bajabot-close');
+  // Optional: click-outside closes panel
+  document.addEventListener('click', (e) => {
+    if (panel.hidden) return;
+    const outside = !panel.contains(e.target) && !toggleBtn.contains(e.target);
+    if (outside) closePanel();
+  });
 
-function openPanel(){ panel.hidden = false; }
-function closePanel(){ panel.hidden = true; }
-
-// Toggle open/close
-toggleBtn.addEventListener('click', () => panel.hidden ? openPanel() : closePanel());
-// Close on ✕
-closeBtn.addEventListener('click', closePanel);
-
-// (nice-to-have) Close on Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !panel.hidden) closePanel();
-});
-
-// (optional) Click outside to close
-document.addEventListener('click', (e) => {
-  if (panel.hidden) return;
-  const clickedOutside = !panel.contains(e.target) && !toggleBtn.contains(e.target);
-  if (clickedOutside) closePanel();
-});
-
-  // --- Handle submissions
-  form.addEventListener("submit", (e) => {
+  // ----- Form handling
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const q = input.value;
+    const q = input.value.trim();
     if (!q) return;
+
     addMsg(q, "me");
     input.value = "";
-    form.querySelector("button[type=submit]").disabled = true;
+    const sendBtn = form.querySelector('button[type="submit"]');
+    if (sendBtn) sendBtn.disabled = true;
 
+    // tiny delay for a natural feel
     setTimeout(() => {
       const found = findAnimal(q);
       if (found) {
@@ -271,12 +261,12 @@ document.addEventListener('click', (e) => {
       } else {
         addMsg("Hmm, I don’t know that one yet. Try “pelican”, “sea lion”, “coyote”, “hummingbird”, “raccoon”, or “mountain lion”.");
       }
-      form.querySelector("button[type=submit]").disabled = false;
+      if (sendBtn) sendBtn.disabled = false;
       input.focus();
-    }, 250); // tiny delay for a natural feel
+    }, 200);
   });
 
   function capitalize(name) {
-    return name.replace(/\b\p{L}/gu, c => c.toUpperCase());
+    return (name || "").replace(/\b\p{L}/gu, c => c.toUpperCase());
   }
 })();
