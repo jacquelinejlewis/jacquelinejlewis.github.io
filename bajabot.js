@@ -226,6 +226,34 @@
     if (e.key === "Escape" && !panel.hidden) closePanel();
   });
 
+  // --- Open/Close wiring (place near top of bajabot.js)
+const root     = document.querySelector('#bajabot-root');
+if (!root) return;
+
+const panel    = root.querySelector('#bajabot-panel');
+const toggleBtn= root.querySelector('#bajabot-toggle');
+const closeBtn = root.querySelector('#bajabot-close');
+
+function openPanel(){ panel.hidden = false; }
+function closePanel(){ panel.hidden = true; }
+
+// Toggle open/close
+toggleBtn.addEventListener('click', () => panel.hidden ? openPanel() : closePanel());
+// Close on ✕
+closeBtn.addEventListener('click', closePanel);
+
+// (nice-to-have) Close on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !panel.hidden) closePanel();
+});
+
+// (optional) Click outside to close
+document.addEventListener('click', (e) => {
+  if (panel.hidden) return;
+  const clickedOutside = !panel.contains(e.target) && !toggleBtn.contains(e.target);
+  if (clickedOutside) closePanel();
+});
+
   // --- Handle submissions
   form.addEventListener("submit", (e) => {
     e.preventDefault();
