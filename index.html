@@ -4,8 +4,50 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jac — Portfolio</title>
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Your site styles -->
   <style>
+    /* 🎨 Fun Doodle Aesthetic */
+    :root {
+      --bg:#fffaf3; --ink:#2c2c2c; --accent:#ff7043; --highlight:#ffe0b2;
+      --card:#ffffff; --border:#e4dcd3; --shadow:0 6px 16px rgba(0,0,0,0.06);
+    }
+    *{box-sizing:border-box}
+
+    html,body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+    .container{max-width:1000px;margin:0 auto;padding:40px 20px}
+    header{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+    .avatar{
+      width:200px;height:200px;object-fit:cover;background:var(--card);
+      border:3px solid var(--accent);padding:6px;box-shadow:var(--shadow);
+      border-radius:30% 70% 70% 30% / 40% 60% 40% 60%;transition:transform .3s ease;
+    }
+    .avatar:hover{transform:rotate(-3deg) scale(1.03)}
+    h1{font-size:clamp(28px,4vw,42px);margin:0}
+    .tagline{max-width:60ch;color:#6b6b6b}
+    .pill{display:inline-block;padding:6px 12px;border:2px solid var(--accent);border-radius:999px;background:var(--highlight);font-size:14px;font-weight:600}
+    .nav{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+    .nav a,.btn{
+      background:var(--highlight);border:2px solid var(--accent);border-radius:999px;
+      padding:8px 14px;font-weight:600;font-size:14px;box-shadow:2px 2px 0 var(--accent);
+      text-decoration:none;color:var(--ink);transition:transform .2s;
+    }
+    .nav a:hover,.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--accent)}
+    a{color:var(--ink);text-decoration:none;border-bottom:2px dashed var(--accent);transition:background .2s,color .2s}
+    a:hover{background:var(--highlight);color:var(--accent)}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:24px}
+    .card{position:relative;background:var(--card);border:2px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+    .card::before{content:"";position:absolute;inset:4px;border:2px dashed var(--border);border-radius:14px;pointer-events:none}
+    h3{font-size:1.2rem;position:relative;margin:0 0 8px}
+  </style>
+
+  <!-- BajaBot styles (outside the <style> block) -->
+  <link rel="stylesheet" href="bajabot.css">
+</head>
 
     <link rel="stylesheet" href="bajabot.css">
     /* 🎨 Fun Doodle Aesthetic */
