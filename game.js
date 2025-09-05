@@ -1,6 +1,4 @@
-// ------------------------------------------------------
-// Utility: footer year + C++ copy button (if present)
-// ------------------------------------------------------
+
 (function initUtility() {
   const y = document.getElementById('y');
   if (y) y.textContent = new Date().getFullYear();
@@ -20,15 +18,13 @@
   }
 })();
 
-// ------------------------------------------------------
-// Baja’s Snack Attack — sprite version (fish vs hooks)
-// ------------------------------------------------------
+
 (function game() {
   const cvs = document.getElementById('gameCanvas');
-  if (!cvs) return; // If there’s no game on this page, do nothing.
+  if (!cvs) return;
   const ctx = cvs.getContext('2d');
 
-  // UI elements
+
   const scoreEl = document.getElementById('gScore');
   const timeEl  = document.getElementById('gTime');
   const livesEl = document.getElementById('gLives');
@@ -40,17 +36,17 @@
 
   const BEST_KEY = 'baja_best';
 
-  // ---- Asset loading helper
+
   function makeImg(src){ const i = new Image(); i.src = src; return i; }
 
-  // ---- Assets (make sure filenames match exactly)
+
   const bajaImg  = makeImg("baja.png");
   const fishImgs = [makeImg("fish1.png"), makeImg("fish2.png"), makeImg("fish3.png")];
   const hookImgs = [makeImg("fishhook1.png"), makeImg("fishhook2.png"), makeImg("fishhook3.png")];
 
-  // ---- Game state
-  let state = 'idle'; // 'idle' | 'running' | 'paused' | 'ended'
-  let items = [];     // falling sprite objects
+ 
+  let state = 'idle'; 
+  let items = [];    
   let score = 0;
   let timeLeft = 60;
   let lives = 3;
@@ -61,7 +57,7 @@
 
   bestEl.textContent = localStorage.getItem(BEST_KEY) || 0;
 
-  // ---- Core helpers
+
   function clampBaja(){ baja.x = Math.max(30, Math.min(cvs.width-30, baja.x)); }
 
   function reset(){
@@ -78,12 +74,12 @@
     drawSplash();
   }
 
-  // Spawn a fish or a hook, with type flag
+  
   function spawn(){
     const x = 30 + Math.random()*(cvs.width-60);
     const vy = 2 + Math.random()*1.5;
-    const size = 44; // draw size for sprite
-    const type = Math.random() < 0.28 ? 'hook' : 'fish'; // ~28% hooks
+    const size = 44; 
+    const type = Math.random() < 0.28 ? 'hook' : 'fish'; 
     const img  = (type === 'hook')
       ? hookImgs[(Math.random()*hookImgs.length)|0]
       : fishImgs[(Math.random()*fishImgs.length)|0];
@@ -94,20 +90,20 @@
   function update(dt){
     if(state!=='running') return;
 
-    // Baja movement (keyboard)
+  
     if(keys.left)  baja.x -= baja.speed*dt;
     if(keys.right) baja.x += baja.speed*dt;
     clampBaja();
 
-    // Spawn — gets a little faster with score
+  
     spawnTimer += dt;
     const spawnEvery = Math.max(0.4, 0.9 - score*0.01);
     if(spawnTimer > spawnEvery){ spawn(); spawnTimer = 0; }
 
-    // Move items
+   
     items.forEach(it => it.y += it.vy*60*dt);
 
-    // Collisions with Baja
+   
     for(let i=items.length-1; i>=0; i--){
       const it = items[i];
       const withinX = Math.abs(it.x - baja.x) < (baja.w * 0.55);
@@ -117,7 +113,7 @@
         if (it.type === 'hook') {
           lives = Math.max(0, lives - 1);
           livesEl.textContent = lives;
-          flash('#ffebee'); // light red feedback
+          flash('#ffebee');
           if (lives === 0) { endGame(); return; }
         } else {
           score++;
@@ -126,41 +122,33 @@
       }
     }
 
-    // Remove offscreen items
+
     items = items.filter(it => it.y < cvs.height + 60);
 
-    // Clock
+
     timeLeft -= dt;
     if(timeLeft <= 0 || lives <= 0) { endGame(); return; }
     timeEl.textContent = Math.max(0, timeLeft|0);
   }
 function draw(){
-  // Blue gradient background (sky → water)
+ 
   const gradient = ctx.createLinearGradient(0, 0, 0, cvs.height);
   gradient.addColorStop(0, '#b3e5fc'); // light sky blue
   gradient.addColorStop(1, '#4fc3f7'); // deeper water blue
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, cvs.width, cvs.height);
 
-  // (Optional) dotted overlay — comment out if you want smooth water only
-  // ctx.fillStyle='rgba(0,0,0,0.03)';
-  // for(let y=0;y<cvs.height;y+=20) {
-  //   for(let x=0;x<cvs.width;x+=20) {
-  //     ctx.fillRect(x,y,2,2);
-  //   }
-  // }
-
-  // Draw falling items (fish & hooks)
+ 
   items.forEach(it=>{
     if(it.img.complete && it.img.naturalWidth){
       ctx.drawImage(it.img, it.x - it.size/2, it.y - it.size/2, it.size, it.size);
     } else {
-      // fallback shape if image not loaded
+     
       ctx.fillStyle = (it.type === 'hook') ? '#ba68c8' : '#4fc3f7';
       ctx.beginPath(); ctx.arc(it.x, it.y, it.size*0.45, 0, Math.PI*2); ctx.fill();
     }
 
-    // halo ring
+
     ctx.beginPath();
     ctx.arc(it.x, it.y, it.size*0.58, 0, Math.PI*2);
     ctx.strokeStyle = (it.type === 'hook') ? '#ba68c8' : '#4fc3f7';
@@ -168,16 +156,16 @@ function draw(){
     ctx.stroke();
   });
 
-  // Draw Baja (pelican sprite)
+ 
   if(bajaImg.complete && bajaImg.naturalWidth){
     ctx.drawImage(bajaImg, baja.x-30, baja.y-30, baja.w, baja.h);
   } else {
-    // fallback circle if baja.png missing
+
     ctx.fillStyle='#ff7043';
     ctx.beginPath(); ctx.arc(baja.x, baja.y, 30, 0, Math.PI*2); ctx.fill();
   }
 
-  // Splash overlays (idle / game over)
+
   if(state==='idle' || state==='ended') drawSplash();
 }
 
@@ -195,7 +183,7 @@ function draw(){
   }
 
   function flash(color){
-    // quick overlay flash for feedback (e.g., on hook hit)
+   
     ctx.save();
     ctx.fillStyle = color;
     ctx.globalAlpha = 0.35;
@@ -209,7 +197,7 @@ function draw(){
     localStorage.setItem(BEST_KEY, best);
     bestEl.textContent = best;
 
-    // Game over overlay
+
     ctx.save();
     ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.fillRect(0,0,cvs.width,cvs.height);
     ctx.fillStyle='#fff'; ctx.fillRect(40,220,cvs.width-80,140);
@@ -221,8 +209,7 @@ function draw(){
     ctx.restore();
   }
 
-  // ---- Controls
-  // Buttons
+
   if (btnStart) btnStart.addEventListener('click', ()=>{
     if(state==='ended') reset();
     state='running';
@@ -235,7 +222,7 @@ function draw(){
     reset();
   });
 
-  // Keyboard
+
   document.addEventListener('keydown', e=>{
     if(state!=='running') return;
     if(e.key==='ArrowLeft') keys.left = true;
@@ -246,7 +233,7 @@ function draw(){
     if(e.key==='ArrowRight') keys.right = false;
   });
 
-  // Touch (left/right halves)
+
   cvs.addEventListener('touchstart', e=>{
     if(state!=='running') return;
     e.preventDefault(); e.stopPropagation();
@@ -258,7 +245,7 @@ function draw(){
     keys.left = false; keys.right = false;
   }, {passive:true});
 
-  // Click nudge (desktop) — doesn’t bubble or trigger links
+ 
   cvs.addEventListener('click', e=>{
     if(state!=='running') return;
     e.preventDefault(); e.stopPropagation();
@@ -268,7 +255,7 @@ function draw(){
     clampBaja();
   });
 
-  // ---- Main loop
+
   let last = performance.now();
   function loop(now){
     const dt = Math.min(0.05, (now-last)/1000); last = now;
@@ -280,9 +267,7 @@ function draw(){
   requestAnimationFrame(loop);
 })();
 
-// ------------------------------------------------------
-// Binary ↔ Decimal Calculator (C++-aligned rules)
-// ------------------------------------------------------
+
 (function converter(){
   const $ = (id) => document.getElementById(id);
   const input = $('calcInput');
@@ -294,9 +279,9 @@ function draw(){
   const copyB = $('copyBin');
   const copyD = $('copyDec');
 
-  if (!input || !btn) return; // calculator not on this page
+  if (!input || !btn) return;
 
-  // C++-matching validators
+  
   function binaryQ(x){
     if (!x || x.length === 0) return false;
     if (x[0] !== '0') return false;
@@ -309,13 +294,13 @@ function draw(){
 
   function decimalQ(x){
     if (!x || x.length === 0) return false;
-    // no leading zero unless exactly "0"
+   
     if (x.length > 1 && x[0] === '0') return false;
-    // digits only
+
     for (let i=0; i<x.length; i++){
       if (x[i] < '0' || x[i] > '9') return false;
     }
-    // range 0..255
+
     const num = Number.parseInt(x, 10);
     if (!Number.isFinite(num)) return false;
     if (num < 0 || num > 255) return false;
@@ -323,7 +308,7 @@ function draw(){
   }
 
   function toBinary(dec){
-    // produce standard binary without forcing a leading 0
+  
     return Number(dec).toString(2);
   }
 
@@ -345,14 +330,13 @@ function draw(){
     }
 
     if (binaryQ(raw)){
-      // valid binary -> show decimal
+  
       const dec = toDecimal(raw);
       setOutputs('Valid BINARY ✔', raw, dec);
     } else if (decimalQ(raw)){
-      // valid decimal -> show binary
+      
       const bin = toBinary(raw);
-      // Note: your C++ binary rule requires leading '0' to be considered binary input,
-      // but for conversion display we keep standard binary (no forced leading 0).
+      
       setOutputs('Valid DECIMAL ✔', bin, String(Number(raw)));
     } else {
       setOutputs('Invalid input ✖', '–', '–');
