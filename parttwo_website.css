@@ -50,7 +50,7 @@ h2 {font-size:1.6rem;margin-bottom:0.5em;}
 .media{margin:12px 0;text-align:center;}
 .media img{max-width:100%;border-radius:12px;}
 
-/* corrected game canvas block */
+
 :root {
   --bg:#fffaf3;
   --ink:#2c2c2c;
@@ -103,12 +103,12 @@ h2 {font-size:1.6rem;margin-bottom:0.5em;}
 .media{margin:12px 0;text-align:center;}
 .media img{max-width:100%;border-radius:12px;}
 
-/* corrected game canvas block */
+
 #gameCanvas {
   display:block;
   margin:0 auto;
   border-radius:12px;
-  background: transparent; /* let gradient from draw() show */
+  background: transparent; /
 }
 
 .btn {
@@ -142,7 +142,7 @@ pre {
   font-size:14px;
 }
 
-/* calculator styles */
+
 .calc { display: grid; gap: 10px; }
 .calc-label { font-weight: 600; }
 .calc-input{
@@ -195,7 +195,7 @@ pre {
   font-size:14px;
 }
 
-/* calculator styles */
+
 .calc { display: grid; gap: 10px; }
 .calc-label { font-weight: 600; }
 .calc-input{
