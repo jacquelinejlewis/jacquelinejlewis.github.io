@@ -1,6 +1,6 @@
-/* BajaBot — robust, Safari-safe version */
+
 (() => {
-  // ----- Elements
+
   const root = document.getElementById('bajabot-root');
   if (!root) { console.error('BajaBot: #bajabot-root not found'); return; }
 
@@ -16,7 +16,7 @@
     return;
   }
 
-  // ----- Facts
+
   const FACTS = {
     "brown pelican": [
       "Brown pelicans plunge-dive from up to ~60 ft, tucking their wings at the last second to scoop fish.",
@@ -123,18 +123,18 @@
     "vole": "meadow vole",
     "wood rat": "woodrat",
     "packrat": "woodrat",
-    "woodcut": "woodrat",       // helpful typo mapping
-    "anna’s hummingbird": "anna's hummingbird", // curly -> straight
+    "woodcut": "woodrat",       
+    "anna’s hummingbird": "anna's hummingbird", 
     "annas hummingbird": "anna's hummingbird",
     "anna hummingbird": "anna's hummingbird"
   };
 
-  // ----- Helpers (ASCII-safe, Safari-safe)
+
   const normalize = (s) =>
     String(s || '')
       .toLowerCase()
       .replace(/[’‘]/g, "'")
-      .replace(/[^a-z0-9\s\-']/g, '')     // strip non-ascii except spaces, hyphen, apostrophe
+      .replace(/[^a-z0-9\s\-']/g, '')   
       .replace(/\s+/g, ' ')
       .trim();
 
@@ -144,14 +144,14 @@
     const q = normalize(query);
     if (!q) return null;
 
-    if (FACTS[q]) return q;              // exact canonical
-    if (SYNONYMS[q]) return SYNONYMS[q]; // exact synonym
+    if (FACTS[q]) return q;              
+    if (SYNONYMS[q]) return SYNONYMS[q]; 
 
-    // partials
+   
     for (const name of CANON) if (name.includes(q) || q.includes(name)) return name;
     for (const [syn, tgt] of Object.entries(SYNONYMS)) if (syn.includes(q) || q.includes(syn)) return tgt;
 
-    // loosen: first word only
+   
     const first = q.split(' ')[0];
     for (const name of CANON) if (name.includes(first)) return name;
     for (const [syn, tgt] of Object.entries(SYNONYMS)) if (syn.includes(first)) return tgt;
@@ -199,7 +199,7 @@
     messages.dataset.greeted = '1';
   }
 
-  // ----- Open/Close
+
   function openPanel(){ panel.hidden = false; input.focus(); if (!messages.dataset.greeted) greet(); }
   function closePanel(){ panel.hidden = true; toggleBtn.focus(); }
 
@@ -216,7 +216,7 @@
     if (outside) closePanel();
   });
 
-  // ----- Form behavior
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const q = input.value.trim();
@@ -228,7 +228,7 @@
     const sendBtn = form.querySelector('button[type="submit"]');
     if (sendBtn) sendBtn.disabled = true;
 
-    // Try/catch so one bad query never breaks the bot
+  
     setTimeout(() => {
       try {
         const found = findAnimal(q);
