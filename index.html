@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jac — Portfolio</title>
 
-  <!-- Fonts -->
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Site styles -->
+
   <style>
-    /* 🎨 Fun Doodle Aesthetic */
+
     :root {
       --bg:#fffaf3; --ink:#2c2c2c; --accent:#ff7043; --highlight:#ffe0b2;
       --card:#ffffff; --border:#e4dcd3; --shadow:0 6px 16px rgba(0,0,0,0.06);
@@ -50,7 +50,7 @@
     }
     footer{margin-top:40px;color:#6b6b6b;font-size:14px}
 
-    /* Code block doodle look */
+ 
     .code-wrap{border:2px solid var(--accent);border-radius:12px;background:#fff8f0;box-shadow:3px 3px 0 var(--accent);padding:14px}
     .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
     .toolbar .title{font-weight:700}
@@ -59,7 +59,7 @@
     details summary{cursor:pointer;font-weight:600;margin-bottom:8px;list-style:none}
     .tiny-hint{color:#6b6b6b;font-size:12px;margin:0 2px}
 
-    /* --- Game styles --- */
+
     .notice{
       background:#fffdf8;border:2px dashed var(--accent);border-radius:14px;
       padding:12px;margin:10px 0;box-shadow:2px 2px 0 var(--accent)
@@ -83,13 +83,13 @@
     @media (max-width:520px){header{justify-content:center;text-align:center}.tagline{margin:0 auto}}
   </style>
 
-  <!-- BajaBot styles (root path) -->
+ 
   <link rel="stylesheet" href="bajabot.css">
 </head>
 
 <body>
   <main class="container">
-    <!-- HERO -->
+
     <header>
       <img class="avatar" src="websiteavatar.png" alt="Jac doodle avatar with skunk" />
       <div>
@@ -109,7 +109,7 @@
       </div>
     </header>
 
-    <!-- PROJECTS -->
+  
     <section id="projects" class="grid">
       <article class="card">
         <h3>MIT App Inventor Game 🎮</h3>
@@ -132,7 +132,7 @@
       </article>
     </section>
 
-    <!-- Binary ↔ Decimal Calculator -->
+
     <section id="calc" class="card">
       <h3>Binary ↔ Decimal Calculator</h3>
       <p class="tagline">Matches my C++ rules: binary must start with <code>0</code> (≤9 chars), decimal is 0–255 with no leading zero.</p>
@@ -155,7 +155,7 @@
       </div>
     </section>
 
-    <!-- GAME -->
+   
     <section id="play" class="card" style="margin-top:16px">
       <h3>Baja’s Snack's 🪶🐟</h3>
 
@@ -188,7 +188,7 @@
       </div>
     </section>
 
-    <!-- C++ CODE -->
+   
     <section id="code" class="card" style="margin-top:16px">
       <h3>C++ Snippet</h3>
       <p class="tagline">Binary/Decimal validator (original assignment code, plus a tiny <code>main()</code> so it runs).</p>
@@ -256,7 +256,7 @@ int main() {
       </div>
     </section>
 
-    <!-- CONTACT -->
+  
     <section id="contact" class="card" style="margin-top:16px">
       <h3>Contact</h3>
       <p>Email: <a href="mailto:jacquelinejlewis5@gmail.com">jacquelinejlewis5@gmail.com</a> ·
@@ -267,7 +267,7 @@ int main() {
     <footer>© <span id="y"></span> Jacqueline Lewis</footer>
   </main>
 
-  <!-- Keep year & copy code -->
+
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
     document.getElementById('copyBtn').addEventListener('click', () => {
@@ -282,7 +282,7 @@ int main() {
     });
   </script>
 
-  <!-- Game script -->
+ 
   <script>
   (function(){
     const cvs = document.getElementById('gameCanvas');
@@ -446,7 +446,7 @@ int main() {
   })();
   </script>
 
-  <!-- Calculator script -->
+
   <script>
   window.addEventListener('DOMContentLoaded', () => {
     const $ = (id) => document.getElementById(id);
@@ -494,7 +494,7 @@ int main() {
   });
   </script>
 
-  <!-- BajaBot (one block, root paths) -->
+
   <div id="bajabot-root" aria-live="polite">
     <button id="bajabot-toggle" class="bb-btn" aria-label="Open BajaBot" title="Ask BajaBot">
       <img src="bajabot-avatar.png" alt="BajaBot icon" width="32" height="32" style="border-radius:50%;">
@@ -523,7 +523,7 @@ int main() {
     </section>
   </div>
 
-  <!-- Bot script (root path) -->
+
  <script defer src="bajabot.js?v=2"></script>
 
 </body>
